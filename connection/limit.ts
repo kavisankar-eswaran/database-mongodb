@@ -1,12 +1,11 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+const { MongoClient } = require('mongodb');
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("reg");
-  dbo.collection("user").find().limit(30).toArray(function(err, result) {
-    if (err) throw err;
-    console.log(result);
-    db.close();
-  });
-}); 
+async function getUsers() {
+  const client = await MongoClient.connect("mongodb://localhost:27017/");
+  const db = client.db("reg");
+  const users = await db.collection("user").find().limit(30).toArray();
+  console.log(users);
+  client.close();
+}
+
+getUsers();
